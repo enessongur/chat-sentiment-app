@@ -38,6 +38,7 @@ const App: React.FC = () => {
   // Backend bağlantısını test et
   const testConnection = async () => {
     try {
+      // Backend API'ye test isteği gönder
       const response = await axios.get(`${BACKEND_API_URL}/messages`);
       setIsConnected(true);
       console.log('✅ Backend bağlantısı başarılı');
@@ -50,6 +51,7 @@ const App: React.FC = () => {
   // Mesajları getir
   const fetchMessages = async () => {
     try {
+      // Backend'den tüm mesajları çek
       const response = await axios.get(`${BACKEND_API_URL}/messages`);
       setMessages(response.data);
     } catch (error) {

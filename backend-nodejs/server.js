@@ -31,6 +31,7 @@ db.serialize(() => {
 
 // Sentiment analizi fonksiyonu
 function analyzeSentiment(text) {
+  // Boş metin kontrolü
   if (!text || text.trim() === '') return 'neutral';
   
   const lowerText = text.toLowerCase();
@@ -50,9 +51,11 @@ function analyzeSentiment(text) {
     'korkunç', 'en kötü', 'çirkin', 'kötü', 'negatif', 'berbat', 'korkunç'
   ];
   
+  // Kelime sayılarını hesapla
   const positiveCount = positiveWords.filter(word => lowerText.includes(word)).length;
   const negativeCount = negativeWords.filter(word => lowerText.includes(word)).length;
   
+  // Sentiment belirle
   if (positiveCount > negativeCount) return 'positive';
   if (negativeCount > positiveCount) return 'negative';
   return 'neutral';
@@ -62,6 +65,7 @@ function analyzeSentiment(text) {
 
 // Tüm mesajları getir
 app.get('/messages', (req, res) => {
+  // Veritabanından mesajları çek
   db.all('SELECT * FROM messages ORDER BY timestamp ASC', (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
@@ -75,11 +79,13 @@ app.get('/messages', (req, res) => {
 app.post('/messages', (req, res) => {
   const { userId, text } = req.body;
   
+  // Input validasyonu
   if (!userId || !text) {
     res.status(400).json({ error: 'userId ve text gerekli' });
     return;
   }
   
+  // Sentiment analizi yap
   const sentiment = analyzeSentiment(text);
   const timestamp = new Date().toISOString();
   

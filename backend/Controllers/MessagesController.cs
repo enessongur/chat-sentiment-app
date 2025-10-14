@@ -22,6 +22,7 @@ namespace ChatBackend.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMessages()
         {
+            // Tüm mesajları timestamp'e göre sırala
             var messages = await _context.Messages.OrderBy(m => m.Timestamp).ToListAsync();
             return Ok(messages);
         }
@@ -33,6 +34,7 @@ namespace ChatBackend.Controllers
             message.Sentiment = _sentimentService.AnalyzeSentiment(message.Text);
             message.Timestamp = DateTime.UtcNow;
             
+            // Veritabanına kaydet
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
             return Ok(message);
