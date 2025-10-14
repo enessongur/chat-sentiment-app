@@ -35,6 +35,7 @@ export default function App() {
   // Mesajları getir
   const fetchMessages = async () => {
     try {
+      // Backend'den tüm mesajları çek
       const response = await axios.get(`${API_URL}/messages`);
       setMessages(response.data);
     } catch (error) {
@@ -44,6 +45,7 @@ export default function App() {
 
   // Mesaj gönder
   const sendMessage = async () => {
+    // Input validasyonu
     if (!message.trim() || !nickname.trim()) {
       Alert.alert('Hata', 'Lütfen nickname ve mesaj girin');
       return;
