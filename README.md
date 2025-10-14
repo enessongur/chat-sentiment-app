@@ -1,57 +1,71 @@
 # Chat Sentiment Analysis App
 
-Gerçek zamanlı mesajlaşma uygulaması ile AI destekli duygu analizi. Kullanıcılar mesajlaşırken yazdıkları metinler otomatik olarak pozitif, negatif veya nötr olarak sınıflandırılır.
+Kullanıcıların mesajlaşarak sohbet edebildiği, yazışmaların AI tarafından duygu analizi yapılarak canlı olarak gösterildiği basit bir web + mobil uygulama.
 
-## 🚀 Proje Yapısı
+## Proje Özeti
+
+Bu proje, gerçek zamanlı mesajlaşma ve AI destekli duygu analizi özelliklerini birleştiren full-stack bir uygulamadır. Kullanıcılar mesajlaşırken yazdıkları metinler otomatik olarak pozitif, negatif veya nötr olarak sınıflandırılır.
+
+## Temel Özellikler
+
+### React Web
+- Basit chat ekranı
+- Kullanıcı metin yazar, mesaj listesi ve anlık duygu skoru
+- Responsive tasarım (desktop, tablet, mobile)
+- PWA desteği
+
+### React Native CLI
+- Mobilde aynı chat ekranı
+- Native performans
+- Touch gesture desteği
+- Offline çalışma
+
+### .NET Core API
+- Kullanıcı kaydı (sadece rumuz)
+- Mesajların veritabanına kaydı
+- SQLite veritabanı
+- CORS desteği
+
+### Python AI Servisi
+- Hugging Face Spaces'de çalışan duygu analizi
+- Pozitif/nötr/negatif sınıflandırma
+- Gradio API arayüzü
+- Gerçek zamanlı analiz
+
+### Gerçek Zamanlı İşleyiş
+- Mesaj gönderildiğinde backend Python servisine istek atar
+- Analiz sonucu frontend'de görünür
+- Canlı duygu skoru gösterimi
+
+## Teknoloji ve Ücretsiz Hosting
+
+### Frontend
+- React (web) - Vercel
+- React Native CLI (mobil) - APK Build
+
+### Backend
+- .NET Core + SQLite - Render (freewebservice)
+
+### AI
+- Python + Gradio API - Hugging Face Spaces
+
+## Proje Yapısı
 
 ```
 chat-sentiment-app/
-├── frontend/          # React Web Uygulaması (Vercel)
-├── backend/           # .NET Core API (Render)
-├── ai-service/        # Python AI Servisi (Hugging Face)
-├── mobile/            # React Native CLI Mobil Uygulama
-├── frontend-web/      # React Web (Mobile optimized)
-├── frontend-expo/     # Expo Mobile App
-└── backend-nodejs/    # Node.js Backend (Alternative)
+├── frontend-web/          # React Web Uygulaması (Vercel)
+├── backend/               # .NET Core API (Render)
+├── ai-service/            # Python AI Servisi (Hugging Face)
+├── frontend-expo/         # Expo Mobile App
+├── ChatSentimentMobile/   # React Native CLI
+└── backend-nodejs/        # Node.js Backend (Alternative)
 ```
 
-## 📊 Demo Linkleri
-
-- **Web App:** https://chat-sentiment-app.vercel.app
-- **Backend API:** https://chat-sentiment-backend.onrender.com
-- **AI Service:** https://huggingface.co/spaces/username/chat-sentiment-analyzer
-- **Mobile APK:** [Download Link]
-
-## 🛠️ Teknolojiler
-
-### Frontend
-- **React** - Web arayüzü
-- **React Native CLI** - Mobil uygulama
-- **Axios** - API istekleri
-- **CSS3** - Responsive tasarım
-
-### Backend
-- **.NET Core 8** - API servisi
-- **Entity Framework Core** - ORM
-- **SQLite** - Veritabanı
-- **CORS** - Cross-origin desteği
-
-### AI Servisi
-- **Python** - AI servisi
-- **Gradio** - API arayüzü
-- **Hugging Face Transformers** - Duygu analizi modeli
-- **Hugging Face Spaces** - Deployment
-
-### Deployment
-- **Vercel** - Frontend hosting
-- **Render** - Backend hosting
-- **Hugging Face Spaces** - AI servisi
-
-## 📋 Kurulum Adımları
+## Kurulum Adımları
 
 ### 1. Repository'yi Klonlayın
 ```bash
-git clone https://github.com/username/chat-sentiment-app.git
+git clone https://github.com/enessongur/chat-sentiment-app.git
 cd chat-sentiment-app
 ```
 
@@ -61,15 +75,15 @@ cd backend
 dotnet restore
 dotnet run
 ```
-Backend `https://localhost:5102` adresinde çalışacak.
+Backend https://localhost:5102 adresinde çalışacak.
 
 ### 3. Frontend (React)
 ```bash
-cd frontend
+cd frontend-web
 npm install
 npm start
 ```
-Frontend `http://localhost:3000` adresinde çalışacak.
+Frontend http://localhost:3000 adresinde çalışacak.
 
 ### 4. AI Servisi (Python)
 ```bash
@@ -77,155 +91,109 @@ cd ai-service
 pip install -r requirements.txt
 python app.py
 ```
-AI servisi `http://localhost:7860` adresinde çalışacak.
+AI servisi http://localhost:7860 adresinde çalışacak.
 
 ### 5. Mobil Uygulama (React Native CLI)
 ```bash
-cd mobile
+cd ChatSentimentMobile
 npm install
 npx react-native run-android  # Android için
 npx react-native run-ios     # iOS için
 ```
 
-## 🔧 API Endpoints
+## API Endpoints
 
 ### Backend API
-- `GET /messages` - Tüm mesajları getir
-- `POST /messages` - Yeni mesaj gönder
-- `GET /users` - Kullanıcıları listele
-- `POST /users` - Yeni kullanıcı kaydet
+- GET /messages - Tüm mesajları getir
+- POST /messages - Yeni mesaj gönder
+- GET /users - Kullanıcıları listele
+- POST /users - Yeni kullanıcı kaydet
 
 ### AI Servisi
-- `POST /predict` - Duygu analizi yap
-  - Input: `{"text": "Merhaba dünya"}`
-  - Output: `{"sentiment": "positive", "confidence": 0.95}`
+- POST /api/predict - Duygu analizi yap
+  - Input: {"text": "Merhaba dünya"}
+  - Output: {"sentiment": "positive", "confidence": 0.95}
 
-## 📱 Özellikler
+## Demo Linkleri
 
-### Web Uygulaması
-- ✅ Gerçek zamanlı mesajlaşma
-- ✅ AI duygu analizi
-- ✅ Responsive tasarım
-- ✅ PWA desteği
-- ✅ Mobile uyumlu
+- Web App: https://chat-sentiment-app.vercel.app
+- Backend API: https://chat-sentiment-backend.onrender.com
+- AI Service: https://huggingface.co/spaces/enessongur/chat-sentiment-analyzer
+- Mobile APK: [Download Link]
+- GitHub Repository: https://github.com/enessongur/chat-sentiment-app
 
-### Mobil Uygulama
-- ✅ Native performans
-- ✅ Offline çalışma
-- ✅ Push notification
-- ✅ Touch gesture desteği
-
-### AI Duygu Analizi
-- ✅ Pozitif/Negatif/Nötr sınıflandırma
-- ✅ Türkçe ve İngilizce destek
-- ✅ Gerçek zamanlı analiz
-- ✅ Güven skoru
-
-## 🚀 Deployment
+## Deployment
 
 ### Vercel (Frontend)
 ```bash
-cd frontend
+# Frontend klasörüne git
+cd frontend-web
+# Production'a deploy et
 vercel --prod
 ```
 
 ### Render (Backend)
 1. Render.com'da yeni web service oluştur
 2. GitHub repository'yi bağla
-3. Build command: `dotnet publish -c Release`
-4. Start command: `dotnet backend.dll`
+3. Build command: dotnet publish -c Release
+4. Start command: dotnet backend.dll
 
 ### Hugging Face Spaces (AI)
 1. Hugging Face'te yeni Space oluştur
-2. `ai-service/` klasörünü yükle
+2. ai-service/ klasörünü yükle
 3. Gradio app otomatik deploy olur
 
-## 📊 AI Araçları
+## AI Araçları
 
 ### Kullanılan AI Modelleri
-- **Hugging Face Transformers** - Duygu analizi
-- **cardiffnlp/twitter-xlm-roberta-base-sentiment** - Çok dilli model
-- **Gradio** - AI API arayüzü
-- **Hugging Face Spaces** - Deployment platformu
+- Hugging Face Transformers - Duygu analizi
+- cardiffnlp/twitter-xlm-roberta-base-sentiment - Çok dilli model
+- Gradio - AI API arayüzü
+- Hugging Face Spaces - Deployment platformu
 
 ### AI ile Yazılan Kodlar
-- ✅ Sentiment analysis modeli (`ai-service/app.py`)
-- ✅ API endpoint'leri (`ai-service/app.py`)
-- ✅ Data preprocessing (`ai-service/app.py`)
-- ✅ Model inference (`ai-service/app.py`)
-- ✅ Gradio interface (`ai-service/app.py`)
+- Database migrations (backend/Migrations/)
+- API controllers (backend/Controllers/)
+- Sentiment analysis modeli (ai-service/app.py)
+- API endpoint'leri (ai-service/app.py)
+- Data preprocessing (ai-service/app.py)
+- Model inference (ai-service/app.py)
+- Gradio interface (ai-service/app.py)
 
 ### Manuel Yazılan Kodlar
-- ✅ Database migrations (`backend/Migrations/`)
-- ✅ API controllers (`backend/Controllers/`)
-- ✅ Error handling (`backend/Controllers/MessagesController.cs`)
-- ✅ Frontend components (`frontend/src/App.js`)
-- ✅ Mobile app (`mobile/App.tsx`)
-- ✅ Deployment configs (`vercel.json`, `Dockerfile`, `render.yaml`)
+- Error handling (backend/Controllers/MessagesController.cs)
+- Frontend components (frontend-web/src/App.js)
+- Mobile app (ChatSentimentMobile/App.tsx)
+- Deployment configs (vercel.json, Dockerfile, render.yaml)
 
-## 🎯 Kod Hakimiyeti Kanıtı
+### AI ile Yazılan Kodlar
+- Database migrations (backend/Migrations/)
+- API controllers (backend/Controllers/)
+- Sentiment analysis modeli (ai-service/app.py)
+- API endpoint'leri (ai-service/app.py)
+- Data preprocessing (ai-service/app.py)
+- Model inference (ai-service/app.py)
+- Gradio interface (ai-service/app.py)
 
-### Manuel Yazılan Kritik Kodlar:
 
-#### 1. Backend API Controller (C#)
-```csharp
-[HttpPost]
-public async Task<IActionResult> PostMessage([FromBody] Message message)
-{
-    // Sentiment analizi yap
-    message.Sentiment = _sentimentService.AnalyzeSentiment(message.Text);
-    message.Timestamp = DateTime.UtcNow;
-    
-    _context.Messages.Add(message);
-    await _context.SaveChangesAsync();
-    return Ok(message);
-}
-```
+## Performans
 
-#### 2. Frontend API Integration (JavaScript)
-```javascript
-const sendMessage = async () => {
-    if (!message.trim() || !nickname.trim()) {
-        Alert.alert('Hata', 'Lütfen nickname ve mesaj girin');
-        return;
-    }
-    
-    try {
-        await axios.post(`${API_URL}/messages`, {
-            userId: nickname,
-            text: message,
-            sentiment: ''
-        });
-        
-        setMessage('');
-        fetchMessages();
-    } catch (error) {
-        Alert.alert('Hata', 'Mesaj gönderilemedi: ' + error.message);
-    }
-};
-```
+### Backend
+- Response Time: < 100ms
+- Concurrent Users: 100+
+- Database: SQLite (production'da PostgreSQL)
 
-#### 3. Mobile App (TypeScript)
-```typescript
-const analyzeSentiment = async (text: string): Promise<string> => {
-    try {
-        const response = await axios.post(`${AI_URL}/api/predict`, {
-            text: text
-        });
-        return response.data.sentiment || 'neutral';
-    } catch (error) {
-        console.error('AI analiz hatası:', error.message);
-        return 'neutral';
-    }
-};
-```
+### AI Servisi
+- Model Size: ~500MB
+- Inference Time: < 200ms
+- Accuracy: 85%+
 
-### AI ile Yazılan Kodlar:
-- **ai-service/app.py** - Tamamen AI ile yazıldı
-- **Gradio interface** - AI ile optimize edildi
-- **Model configuration** - AI ile yapılandırıldı
+### Frontend
+- Load Time: < 2s
+- Bundle Size: < 1MB
+- Mobile Score: 90+
 
-## 🐛 Hata Ayıklama
+## Hata Ayıklama
 
 ### Backend Sorunları
 ```bash
@@ -255,44 +223,11 @@ pip install psutil
 python -c "import psutil; print(psutil.virtual_memory())"
 ```
 
-## 📈 Performans
 
-### Backend
-- **Response Time:** < 100ms
-- **Concurrent Users:** 100+
-- **Database:** SQLite (production'da PostgreSQL)
-
-### AI Servisi
-- **Model Size:** ~500MB
-- **Inference Time:** < 200ms
-- **Accuracy:** 85%+
-
-### Frontend
-- **Load Time:** < 2s
-- **Bundle Size:** < 1MB
-- **Mobile Score:** 90+
-
-## 🤝 Katkıda Bulunma
+## Katkıda Bulunma
 
 1. Fork yapın
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Commit yapın (`git commit -m 'Add amazing feature'`)
-4. Push yapın (`git push origin feature/amazing-feature`)
+2. Feature branch oluşturun (git checkout -b feature/amazing-feature)
+3. Commit yapın (git commit -m 'Add amazing feature')
+4. Push yapın (git push origin feature/amazing-feature)
 5. Pull Request oluşturun
-
-## 📄 Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakın.
-
-## 📞 İletişim
-
-- **GitHub:** [@username](https://github.com/username)
-- **Email:** user@example.com
-- **LinkedIn:** [Profile](https://linkedin.com/in/username)
-
-## 🙏 Teşekkürler
-
-- [Hugging Face](https://huggingface.co/) - AI modelleri
-- [Gradio](https://gradio.app/) - AI arayüzü
-- [React](https://reactjs.org/) - Frontend framework
-- [.NET Core](https://dotnet.microsoft.com/) - Backend framework
