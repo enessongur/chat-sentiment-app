@@ -1,4 +1,3 @@
-# .NET Core Dockerfile for Render deployment
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
@@ -6,9 +5,9 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["../backend.csproj", "."]
+COPY ["backend.csproj", "."]
 RUN dotnet restore "backend.csproj"
-COPY ../ .
+COPY . .
 RUN dotnet build "backend.csproj" -c Release -o /app/build
 
 FROM build AS publish
