@@ -122,6 +122,27 @@ npx react-native run-ios     # iOS için
 - Mobile APK: [Download Link]
 - GitHub Repository: https://github.com/enessongur/chat-sentiment-app
 
+## Deployment Adımları
+
+### Vercel (Frontend)
+1. Vercel.com'a git
+2. GitHub repository'yi bağla
+3. `frontend/web` klasörünü seç
+4. Deploy et
+
+### Render (Backend)
+1. Render.com'a git
+2. GitHub repository'yi bağla
+3. `backend/dotnet` klasörünü seç
+4. Build command: `dotnet publish -c Release -o ./publish`
+5. Start command: `dotnet ./publish/backend.dll`
+
+### Hugging Face Spaces (AI)
+1. Hugging Face Spaces'e git
+2. Yeni Space oluştur
+3. `ai-service/` klasörünü yükle
+4. Gradio app otomatik deploy olur
+
 ## Deployment
 
 ### Vercel (Frontend)

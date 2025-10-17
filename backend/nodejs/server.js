@@ -4,7 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = 5102;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5102;
 
 // Middleware
 app.use(cors());
@@ -143,7 +143,7 @@ app.get('/users', (req, res) => {
 });
 
 // Sunucuyu başlat
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Backend server ${PORT} portunda çalışıyor`);
   console.log(`📱 API Endpoints:`);
   console.log(`   GET  http://localhost:${PORT}/messages`);

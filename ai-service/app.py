@@ -3,6 +3,7 @@ import requests
 import json
 from transformers import pipeline
 import torch
+import os
 
 # Duygu analizi modeli yükle
 # Türkçe ve İngilizce destekli model
@@ -202,10 +203,11 @@ def create_interface():
 # Gradio arayüzünü oluştur ve başlat
 if __name__ == "__main__":
     interface = create_interface()
+    port = int(os.environ.get("PORT", "7860"))
     interface.launch(
         server_name="0.0.0.0",
-        server_port=7860,
-        share=True,
+        server_port=port,
+        share=False,
         show_error=True
     )
 
