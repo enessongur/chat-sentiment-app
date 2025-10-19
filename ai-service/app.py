@@ -4,8 +4,6 @@ import json
 from transformers import pipeline
 import torch
 import os
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
 
 # Duygu analizi modeli yükle
 # Türkçe ve İngilizce destekli model
@@ -68,7 +66,7 @@ def create_interface():
     Gradio web arayüzü oluşturur
     """
     with gr.Blocks(
-        title="Chat Sentiment Analysis API",
+        title="Chat Sentiment Analysis",
         theme=gr.themes.Soft(),
         css="""
         .gradio-container {
@@ -77,90 +75,30 @@ def create_interface():
         }
         """
     ) as interface:
-        
-        gr.Markdown("""
-        # 🤖 Chat Sentiment Analysis API
-        
-        Bu API, metinlerin duygu analizini yapar ve **pozitif**, **negatif** veya **nötr** olarak sınıflandırır.
-        
-        ## 🚀 Kullanım
-        - Metin kutusuna analiz etmek istediğiniz metni yazın
-        - "Analyze" butonuna tıklayın
-        - Sonuç otomatik olarak görünecek
-        
-        ## 📡 API Endpoint
-        ```
-        POST /api/predict
-        Content-Type: application/json
-        
-        {
-            "text": "Merhaba, bugün harika bir gün!"
-        }
-        ```
-        """)
+        # Minimal UI
         
         with gr.Row():
             with gr.Column():
-                text_input = gr.Textbox(
-                    label="📝 Metin Girin",
-                    placeholder="Analiz etmek istediğiniz metni buraya yazın...",
-                    lines=3,
-                    max_lines=10
-                )
+                text_input = gr.Textbox(label="Metin", placeholder="Metin girin...", lines=3, max_lines=10)
                 
-                analyze_btn = gr.Button(
-                    "🔍 Analiz Et",
-                    variant="primary",
-                    size="lg"
-                )
+                analyze_btn = gr.Button("Analiz Et", variant="primary", size="lg")
                 
             with gr.Column():
-                sentiment_output = gr.Textbox(
-                    label="🎯 Duygu Analizi Sonucu",
-                    interactive=False,
-                    lines=2
-                )
+                sentiment_output = gr.Textbox(label="Duygu", interactive=False, lines=1)
                 
-                confidence_output = gr.Textbox(
-                    label="📊 Güven Skoru",
-                    interactive=False,
-                    lines=1
-                )
-        
-        # Örnek metinler
-        gr.Examples(
-            examples=[
-                ["Merhaba, bugün harika bir gün! Çok mutluyum."],
-                ["Bu çok kötü bir deneyimdi. Hiç beğenmedim."],
-                ["Bugün hava normal, ne iyi ne kötü."],
-                ["I love this app! It's amazing!"],
-                ["This is terrible, I hate it."],
-                ["The weather is okay today."]
-            ],
-            inputs=text_input,
-            label="💡 Örnek Metinler"
-        )
+                confidence_output = gr.Textbox(label="Güven", interactive=False, lines=1)
+        # No examples or extra text
         
         # Analiz fonksiyonu
         def analyze_text(text):
             if not text.strip():
-                return "Lütfen bir metin girin", "0%"
+                return "", "0%"
             
             result = analyze_sentiment(text)
             sentiment = result["sentiment"]
             confidence = result["confidence"]
             
-            # Emoji ekle
-            emoji_map = {
-                "positive": "😊 Pozitif",
-                "negative": "😞 Negatif", 
-                "neutral": "😐 Nötr"
-            }
-            
-            sentiment_display = emoji_map.get(sentiment, sentiment)
-            confidence_display = f"{confidence * 100:.1f}%"
-            
-            return sentiment_display, confidence_display
+            return sentiment, f"{confidence * 100:.1f}%"
         
         # Event handlers
         analyze_btn.click(
@@ -174,50 +112,18 @@ def create_interface():
             inputs=text_input,
             outputs=[sentiment_output, confidence_output]
         )
-        
-        # API endpoint bilgisi
-        gr.Markdown("""
-        ## 🔧 API Kullanımı
-        
-        ### cURL Örneği:
-        ```bash
-        curl -X POST "https://your-space-url.hf.space/api/predict" \\
-             -H "Content-Type: application/json" \\
-             -d '{"text": "Merhaba dünya!"}'
-        ```
-        
-        ### Python Örneği:
-        ```python
-        import requests
-        
-        response = requests.post(
-            "https://your-space-url.hf.space/api/predict",
-            json={"text": "Merhaba dünya!"}
-        )
-        
-        result = response.json()
-        print(result)  # {"sentiment": "positive", "confidence": 0.95}
-        ```
-        """)
+        # No additional instructions
     
     return interface
 
-app = FastAPI()
-
-# REST API endpoint
-@app.post("/api/predict")
-async def api_predict(payload: dict):
-    text = payload.get("text", "")
-    result = analyze_sentiment(text)
-    return JSONResponse(result)
-
-# Mount Gradio UI under / (root)
-interface = create_interface()
-app = gr.mount_gradio_app(app, interface, path="/")
-
-# For local run (HF Spaces runs via gunicorn/uvicorn)
+# Gradio arayüzünü oluştur ve başlat
 if __name__ == "__main__":
-    import uvicorn
+    interface = create_interface()
     port = int(os.environ.get("PORT", "7860"))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    interface.launch(
+        server_name="0.0.0.0",
+        server_port=port,
+        share=False,
+        show_error=True
+    )
 
