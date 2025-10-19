@@ -4,6 +4,8 @@ import json
 from transformers import pipeline
 import torch
 import os
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 # Duygu analizi modeli yükle
 # Türkçe ve İngilizce destekli model
@@ -200,14 +202,22 @@ def create_interface():
     
     return interface
 
-# Gradio arayüzünü oluştur ve başlat
+app = FastAPI()
+
+# REST API endpoint
+@app.post("/api/predict")
+async def api_predict(payload: dict):
+    text = payload.get("text", "")
+    result = analyze_sentiment(text)
+    return JSONResponse(result)
+
+# Mount Gradio UI under / (root)
+interface = create_interface()
+app = gr.mount_gradio_app(app, interface, path="/")
+
+# For local run (HF Spaces runs via gunicorn/uvicorn)
 if __name__ == "__main__":
-    interface = create_interface()
+    import uvicorn
     port = int(os.environ.get("PORT", "7860"))
-    interface.launch(
-        server_name="0.0.0.0",
-        server_port=port,
-        share=False,
-        show_error=True
-    )
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
