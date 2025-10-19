@@ -1,4 +1,15 @@
-# AI Service - Sentiment Analysis
+---
+title: Chat Sentiment Analysis API
+emoji: 🤖
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+sdk_version: "4.0.0"
+app_file: app.py
+pinned: false
+---
+
+# Chat Sentiment Analysis API
 
 Bu servis, Hugging Face Spaces'de deploy edilen duygu analizi API'sidir.
 
@@ -9,18 +20,7 @@ Bu servis, Hugging Face Spaces'de deploy edilen duygu analizi API'sidir.
 - **Güven skoru**
 - **RESTful API**
 
-## 📦 Kurulum
-
-```bash
-pip install -r requirements.txt
-```
-
 ## 🔧 Kullanım
-
-### Lokal Çalıştırma
-```bash
-python app.py
-```
 
 ### API Endpoint
 ```
