@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const API_URL = 'http://localhost:5102';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5102';
 
 function App() {
   const [messages, setMessages] = useState([]);
