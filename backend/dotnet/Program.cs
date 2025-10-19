@@ -8,7 +8,7 @@ builder.Services.AddDbContext<ChatContext>(options =>
     options.UseSqlite("Data Source=chat.db"));
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<SentimentAnalysisService>();
+builder.Services.AddHttpClient<SentimentAnalysisService>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

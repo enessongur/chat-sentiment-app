@@ -71,15 +71,15 @@ cd chat-sentiment-app
 
 ### 2. Backend (.NET Core)
 ```bash
-cd backend
+cd backend/dotnet
 dotnet restore
-dotnet run
+dotnet run --urls "http://localhost:5102"
 ```
-Backend https://localhost:5102 adresinde çalışacak.
+Backend http://localhost:5102 adresinde çalışacak.
 
 ### 3. Frontend (React)
 ```bash
-cd frontend-web
+cd frontend/web
 npm install
 npm start
 ```
@@ -93,9 +93,16 @@ python app.py
 ```
 AI servisi http://localhost:7860 adresinde çalışacak.
 
-### 5. Mobil Uygulama (React Native CLI)
+### 5. Mobil Uygulama (Expo)
 ```bash
-cd ChatSentimentMobile
+cd frontend/expo
+npm install
+npx expo start
+```
+
+### 6. React Native CLI (Alternatif)
+```bash
+cd frontend/mobile
 npm install
 npx react-native run-android  # Android için
 npx react-native run-ios     # iOS için
@@ -127,15 +134,19 @@ npx react-native run-ios     # iOS için
 ### Vercel (Frontend)
 1. Vercel.com'a git
 2. GitHub repository'yi bağla
-3. `frontend/web` klasörünü seç
-4. Deploy et
+3. Root Directory: `frontend/web` seç
+4. Environment Variables: `REACT_APP_API_URL=https://your-backend.onrender.com`
+5. Deploy et
 
 ### Render (Backend)
 1. Render.com'a git
-2. GitHub repository'yi bağla
-3. `backend/dotnet` klasörünü seç
-4. Build command: `dotnet publish -c Release -o ./publish`
-5. Start command: `dotnet ./publish/backend.dll`
+2. New Web Service, Language: Docker
+3. Dockerfile Path: `backend/dotnet/Dockerfile`
+4. Environment Variables:
+   - `ASPNETCORE_ENVIRONMENT=Production`
+   - `ASPNETCORE_URLS=http://0.0.0.0:$PORT`
+   - `AI_SERVICE_URL=https://your-space.hf.space`
+5. Deploy et
 
 ### Hugging Face Spaces (AI)
 1. Hugging Face Spaces'e git
@@ -173,8 +184,8 @@ vercel --prod
 - Hugging Face Spaces - Deployment platformu
 
 ### AI ile Yazılan Kodlar
-- Database migrations (backend/Migrations/)
-- API controllers (backend/Controllers/)
+- Database migrations (backend/dotnet/Migrations/)
+- API controllers (backend/dotnet/Controllers/)
 - Sentiment analysis modeli (ai-service/app.py)
 - API endpoint'leri (ai-service/app.py)
 - Data preprocessing (ai-service/app.py)
@@ -182,19 +193,14 @@ vercel --prod
 - Gradio interface (ai-service/app.py)
 
 ### Manuel Yazılan Kodlar
-- Error handling (backend/Controllers/MessagesController.cs)
-- Frontend components (frontend-web/src/App.js)
-- Mobile app (ChatSentimentMobile/App.tsx)
-- Deployment configs (vercel.json, Dockerfile, render.yaml)
-
-### AI ile Yazılan Kodlar
-- Database migrations (backend/Migrations/)
-- API controllers (backend/Controllers/)
-- Sentiment analysis modeli (ai-service/app.py)
-- API endpoint'leri (ai-service/app.py)
-- Data preprocessing (ai-service/app.py)
-- Model inference (ai-service/app.py)
-- Gradio interface (ai-service/app.py)
+- Error handling (backend/dotnet/Controllers/MessagesController.cs)
+- Frontend components (frontend/web/src/App.js)
+- Mobile app (frontend/expo/App.js)
+- Deployment configs (Dockerfile, render.yaml)
+- API integration (backend/dotnet/Services/SentimentAnalysisService.cs)
+- Database queries (backend/dotnet/Controllers/MessagesController.cs)
+- API calls (frontend/web/src/App.js)
+- UI components (frontend/web/src/App.js)
 
 
 ## Performans

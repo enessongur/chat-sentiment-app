@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5102';
+const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5102';
 
 export default function App() {
   const [messages, setMessages] = useState([]);

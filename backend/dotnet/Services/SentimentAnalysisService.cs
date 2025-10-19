@@ -1,17 +1,20 @@
-using Microsoft.ML;
-using Microsoft.ML.Data;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 
 namespace ChatBackend.Services
 {
     public class SentimentAnalysisService
     {
-        private readonly MLContext _mlContext;
-        private readonly ITransformer _model;
+        private readonly HttpClient _httpClient;
+        private readonly string? _aiServiceUrl;
 
-        public SentimentAnalysisService()
+        public SentimentAnalysisService(HttpClient httpClient)
         {
-            _mlContext = new MLContext();
-            _model = CreateSimpleModel();
+            _httpClient = httpClient;
+
+            // Render/Vercel gibi ortamlarda AI servis URL'sini env'den al
+            _aiServiceUrl = Environment.GetEnvironmentVariable("AI_SERVICE_URL");
         }
 
         public string AnalyzeSentiment(string text)
@@ -19,7 +22,35 @@ namespace ChatBackend.Services
             if (string.IsNullOrWhiteSpace(text))
                 return "neutral";
 
-            // Basit kural tabanlı sentiment analizi
+            // 1) Eğer AI servis URL'i tanımlıysa, HTTP ile harici servisi çağır
+            if (!string.IsNullOrWhiteSpace(_aiServiceUrl))
+            {
+                try
+                {
+                    var requestBody = new { text };
+                    var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
+                    var endpoint = _aiServiceUrl!.TrimEnd('/') + "/api/predict";
+                    var response = _httpClient.PostAsync(endpoint, content).GetAwaiter().GetResult();
+                    response.EnsureSuccessStatusCode();
+
+                    var responseString = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    using var json = JsonDocument.Parse(responseString);
+                    if (json.RootElement.TryGetProperty("sentiment", out var sentimentProp))
+                    {
+                        var sentimentValue = sentimentProp.GetString();
+                        if (!string.IsNullOrWhiteSpace(sentimentValue))
+                        {
+                            return sentimentValue!;
+                        }
+                    }
+                }
+                catch
+                {
+                    // Sessizce fallback'e geç (HD: harici servis geçici olarak ulaşılmaz olabilir)
+                }
+            }
+
+            // 2) Fallback: basit kural tabanlı analiz (offline çalışır)
             var lowerText = text.ToLower();
             
             // Pozitif kelimeler
@@ -39,30 +70,6 @@ namespace ChatBackend.Services
                 return "neutral";
         }
 
-        private ITransformer CreateSimpleModel()
-        {
-            // Basit bir model oluştur - gerçek uygulamada daha gelişmiş model kullanılabilir
-            var data = new List<SentimentData>
-            {
-                new SentimentData { Text = "I love this!", Sentiment = "positive" },
-                new SentimentData { Text = "This is terrible!", Sentiment = "negative" },
-                new SentimentData { Text = "It's okay.", Sentiment = "neutral" }
-            };
-
-            var dataView = _mlContext.Data.LoadFromEnumerable(data);
-            var pipeline = _mlContext.Transforms.Text.FeaturizeText("Features", "Text")
-                .Append(_mlContext.Transforms.Conversion.MapValueToKey("Label", "Sentiment"))
-                .Append(_mlContext.MulticlassClassification.Trainers.SdcaMaximumEntropy())
-                .Append(_mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
-
-            return pipeline.Fit(dataView);
-        }
-    }
-
-    public class SentimentData
-    {
-        public string Text { get; set; } = string.Empty;
-        public string Sentiment { get; set; } = string.Empty;
     }
 }
 
