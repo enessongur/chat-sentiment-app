@@ -1,6 +1,6 @@
 ---
 title: Chat Sentiment Analysis API
-emoji: robot
+emoji: 🤖
 colorFrom: blue
 colorTo: purple
 sdk: gradio
